@@ -1,17 +1,21 @@
 <?php
+
+declare(strict_types=1);
+
+use dokuwiki\Extension\SyntaxPlugin;
+
 /**
  * DokuWiki Plugin today (Syntax Component)
  *
  * @license GPL 2 http://www.gnu.org/licenses/gpl-2.0.html
  * @author  Michael Große <mic.grosse+dokuwiki@googlemail.com>
  */
-
-class syntax_plugin_today extends DokuWiki_Syntax_Plugin
+final class syntax_plugin_today extends SyntaxPlugin
 {
     /**
      * @return string Syntax mode type
      */
-    public function getType()
+    public function getType(): string
     {
         return 'substition';
     }
@@ -19,7 +23,7 @@ class syntax_plugin_today extends DokuWiki_Syntax_Plugin
     /**
      * @return string Paragraph type
      */
-    public function getPType()
+    public function getPType(): string
     {
         return 'normal';
     }
@@ -27,7 +31,7 @@ class syntax_plugin_today extends DokuWiki_Syntax_Plugin
     /**
      * @return int Sort order - Low numbers go before high numbers
      */
-    public function getSort()
+    public function getSort(): int
     {
         return 1000;
     }
@@ -37,7 +41,7 @@ class syntax_plugin_today extends DokuWiki_Syntax_Plugin
      *
      * @param string $mode Parser mode
      */
-    public function connectTo($mode)
+    public function connectTo($mode): void
     {
         $this->Lexer->addSpecialPattern('\{today.*?\}', $mode, 'plugin_today');
     }
@@ -52,9 +56,9 @@ class syntax_plugin_today extends DokuWiki_Syntax_Plugin
      *
      * @return array Data for the renderer
      */
-    public function handle($match, $state, $pos, Doku_Handler $handler)
+    public function handle($match, $state, $pos, Doku_Handler $handler): array
     {
-        $data = array();
+        $data = [];
 
         $namespace = trim(substr($match, strlen('{today'), -1));
         $data['namespace'] = $namespace;
@@ -71,7 +75,7 @@ class syntax_plugin_today extends DokuWiki_Syntax_Plugin
      *
      * @return bool If rendering was successful.
      */
-    public function render($mode, Doku_Renderer $renderer, $data)
+    public function render($mode, Doku_Renderer $renderer, $data): bool
     {
         if ($mode !== 'xhtml') {
             return false;
@@ -84,4 +88,3 @@ class syntax_plugin_today extends DokuWiki_Syntax_Plugin
         return true;
     }
 }
-
