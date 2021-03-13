@@ -1,62 +1,74 @@
 <?php
+
+declare(strict_types=1);
+
+namespace dokuwiki\plugin\today\test;
+
+use DokuWikiTest;
+
 /**
  * General tests for the today plugin
  *
  * @group plugin_today
  * @group plugins
  */
-class general_plugin_today_test extends DokuWikiTest
+final class GeneralTest extends DokuWikiTest
 {
 
     /**
      * Simple test to make sure the plugin.info.txt is in correct format
      */
-    public function test_plugininfo()
+    public function testPluginInfo(): void
     {
         $file = __DIR__ . '/../plugin.info.txt';
-        $this->assertFileExists($file);
+        self::assertFileExists($file);
 
         $info = confToHash($file);
 
-        $this->assertArrayHasKey('base', $info);
-        $this->assertArrayHasKey('author', $info);
-        $this->assertArrayHasKey('email', $info);
-        $this->assertArrayHasKey('date', $info);
-        $this->assertArrayHasKey('name', $info);
-        $this->assertArrayHasKey('desc', $info);
-        $this->assertArrayHasKey('url', $info);
+        self::assertArrayHasKey('base', $info);
+        self::assertArrayHasKey('author', $info);
+        self::assertArrayHasKey('email', $info);
+        self::assertArrayHasKey('date', $info);
+        self::assertArrayHasKey('name', $info);
+        self::assertArrayHasKey('desc', $info);
+        self::assertArrayHasKey('url', $info);
 
-        $this->assertEquals('today', $info['base']);
-        $this->assertRegExp('/^https?:\/\//', $info['url']);
-        $this->assertTrue(mail_isvalid($info['email']));
-        $this->assertRegExp('/^\d\d\d\d-\d\d-\d\d$/', $info['date']);
-        $this->assertTrue(false !== strtotime($info['date']));
+        self::assertEquals('today', $info[ 'base' ]);
+        self::assertRegExp('/^https?:\/\//', $info[ 'url' ]);
+        self::assertTrue(mail_isvalid($info[ 'email' ]));
+        self::assertRegExp('/^\d\d\d\d-\d\d-\d\d$/', $info[ 'date' ]);
+        self::assertTrue(false !== strtotime($info[ 'date' ]));
     }
 
     /**
      * Test to ensure that every conf['...'] entry in conf/default.php has a corresponding meta['...'] entry in
      * conf/metadata.php.
      */
-    public function test_plugin_conf()
+    public function testPluginConf(): void
     {
         $conf_file = __DIR__ . '/../conf/default.php';
+        $meta_file = __DIR__ . '/../conf/metadata.php';
+
+        if (!file_exists($conf_file) && !file_exists($meta_file)) {
+            self::markTestSkipped('No config files exist -> skipping test');
+        }
+
         if (file_exists($conf_file)) {
             include($conf_file);
         }
-        $meta_file = __DIR__ . '/../conf/metadata.php';
         if (file_exists($meta_file)) {
             include($meta_file);
         }
 
-        $this->assertEquals(
+        self::assertEquals(
             gettype($conf),
             gettype($meta),
             'Both ' . DOKU_PLUGIN . 'today/conf/default.php and ' . DOKU_PLUGIN . 'today/conf/metadata.php have to exist and contain the same keys.'
         );
 
-        if (gettype($conf) != 'NULL' && gettype($meta) != 'NULL') {
+        if ($conf !== null && $meta !== null) {
             foreach ($conf as $key => $value) {
-                $this->assertArrayHasKey(
+                self::assertArrayHasKey(
                     $key,
                     $meta,
                     'Key $meta[\'' . $key . '\'] missing in ' . DOKU_PLUGIN . 'today/conf/metadata.php'
@@ -64,13 +76,12 @@ class general_plugin_today_test extends DokuWikiTest
             }
 
             foreach ($meta as $key => $value) {
-                $this->assertArrayHasKey(
+                self::assertArrayHasKey(
                     $key,
                     $conf,
                     'Key $conf[\'' . $key . '\'] missing in ' . DOKU_PLUGIN . 'today/conf/default.php'
                 );
             }
         }
-
     }
 }
