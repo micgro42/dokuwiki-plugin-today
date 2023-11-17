@@ -81,7 +81,8 @@ final class syntax_plugin_today extends SyntaxPlugin
             return false;
         }
 
-        $today = date('Y-m-d');
+        $dateFormat = $this->getConf('dateformat');
+        $today = date($dateFormat);
         $pageId = $data['namespace'] . ':' . $today;
         $renderer->internallink($pageId, 'today');
 
