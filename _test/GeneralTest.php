@@ -34,9 +34,9 @@ final class GeneralTest extends DokuWikiTest
         self::assertArrayHasKey('url', $info);
 
         self::assertEquals('today', $info[ 'base' ]);
-        self::assertRegExp('/^https?:\/\//', $info[ 'url' ]);
+        self::assertMatchesRegularExpression('/^https?:\/\//', $info[ 'url' ]);
         self::assertTrue(mail_isvalid($info[ 'email' ]));
-        self::assertRegExp('/^\d\d\d\d-\d\d-\d\d$/', $info[ 'date' ]);
+        self::assertMatchesRegularExpression('/^\d\d\d\d-\d\d-\d\d$/', $info[ 'date' ]);
         self::assertTrue(false !== strtotime($info[ 'date' ]));
     }
 
