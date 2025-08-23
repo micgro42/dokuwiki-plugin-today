@@ -10,7 +10,7 @@ use dokuwiki\Extension\SyntaxPlugin;
  * @license GPL 2 http://www.gnu.org/licenses/gpl-2.0.html
  * @author  Michael Große <mic.grosse+dokuwiki@googlemail.com>
  */
-final class syntax_plugin_today extends SyntaxPlugin
+final class syntax_plugin_today_today extends SyntaxPlugin
 {
     /**
      * @return string Syntax mode type
@@ -43,7 +43,7 @@ final class syntax_plugin_today extends SyntaxPlugin
      */
     public function connectTo($mode): void
     {
-        $this->Lexer->addSpecialPattern('\{today.*?\}', $mode, 'plugin_today');
+        $this->Lexer->addSpecialPattern('\{today.*?\}', $mode, 'plugin_today_today');
     }
 
     /**
