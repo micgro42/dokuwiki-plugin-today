@@ -6,19 +6,19 @@ namespace dokuwiki\plugin\today\test;
 
 use Doku_Handler;
 use dokuwiki\test\mock\Doku_Renderer;
-use syntax_plugin_today;
+use syntax_plugin_today_today;
 use DokuWikiTest;
 
 /**
- * Tests for the syntax component of the today plugin
+ * Tests for the `{today name:space}` syntax component of the today plugin
  *
  * @group plugin_today
  * @group plugins
  */
-class SyntaxTest extends DokuWikiTest {
+final class SyntaxTodayTest extends DokuWikiTest {
     protected $pluginsEnabled = ['today'];
 
-    public static function parseMatchTestDataProvider () {
+    public static function parseMatchTestDataProvider(): iterable {
         return [
             [
                 '{today name:space}',
@@ -32,15 +32,11 @@ class SyntaxTest extends DokuWikiTest {
 
     /**
      * @dataProvider parseMatchTestDataProvider
-     *
-     * @param $input
-     * @param $expectedOutput
-     * @param $msg
      */
-    public function testParseMatch($input, $expectedOutput, $msg) {
+    public function testParseMatch(string $input, array $expectedOutput, string $msg): void {
         // arrange
-        /** @var syntax_plugin_today $syntax */
-        $syntax = plugin_load('syntax', 'today');
+        /** @var syntax_plugin_today_today $syntax */
+        $syntax = plugin_load('syntax', 'today_today');
 
         // act
         $actualOutput = $syntax->handle($input, 5, 1, new Doku_Handler());
@@ -49,9 +45,9 @@ class SyntaxTest extends DokuWikiTest {
         self::assertEquals($expectedOutput, $actualOutput, $msg);
     }
 
-    public function testRendererXHTML() {
-        /** @var syntax_plugin_today $syntax */
-        $syntax = plugin_load('syntax', 'today');
+    public function testRendererXHTML(): void {
+        /** @var syntax_plugin_today_today $syntax */
+        $syntax = plugin_load('syntax', 'today_today');
         $testData = [
             'namespace' => 'name:space',
         ];
@@ -67,9 +63,9 @@ class SyntaxTest extends DokuWikiTest {
         self::assertTrue($actualStatus);
     }
 
-    public function testRendererMeta() {
-        /** @var syntax_plugin_today $syntax */
-        $syntax = plugin_load('syntax', 'today');
+    public function testRendererMeta(): void {
+        /** @var syntax_plugin_today_today $syntax */
+        $syntax = plugin_load('syntax', 'today_today');
         $testData = [
             'namespace' => 'name:space',
         ];
