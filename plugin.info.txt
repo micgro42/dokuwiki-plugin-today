@@ -1,7 +1,7 @@
 base   today
 author Michael Große
 email  mic.grosse+dokuwiki@googlemail.com
-date   2021-03-13
+date   2025-08-24
 name   today plugin
-desc   [PHP 7.2 - 8.0] A syntax that generates links to a page with today's date
+desc   Quick plugin that adds syntax to create a link to today's page
 url    https://www.dokuwiki.org/plugin:today
