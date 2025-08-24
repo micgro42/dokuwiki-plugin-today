@@ -17,8 +17,9 @@ final class action_plugin_today extends ActionPlugin
     {
         if ($event->data === 'today') {
             global $INPUT;
-            $namespace = $INPUT->str('namespace') ?? '';
-            $today = date('Y-m-d');
+            $namespace = $INPUT->has('namespace') ? $INPUT->str('namespace') : '';
+            $format = $INPUT->has('format') ? $INPUT->str('format') : 'Y-m-d';
+            $today = date($format);
             send_redirect(wl("{$namespace}:{$today}"));
         }
     }

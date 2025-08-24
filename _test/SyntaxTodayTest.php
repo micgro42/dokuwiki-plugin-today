@@ -19,46 +19,43 @@ final class SyntaxTodayTest extends DokuWikiTest {
     protected $pluginsEnabled = ['today'];
 
     public static function parseMatchTestDataProvider(): iterable {
-        return [
+        yield 'no format' =>
             [
                 '{today name:space}',
                 [
                     'namespace' => 'name:space',
+                    'format' => null,
                 ],
-                'simple example'
+                'name:space:' . date('Y-m-d'),
+            ];
+
+        yield 'custom format' => [
+            '{today name:space Y:Y-m-d}',
+            [
+                'namespace' => 'name:space',
+                'format' => 'Y:Y-m-d',
             ],
+            'name:space:' . date('Y:Y-m-d')
         ];
     }
 
     /**
      * @dataProvider parseMatchTestDataProvider
      */
-    public function testParseMatch(string $input, array $expectedOutput, string $msg): void {
-        // arrange
+    public function testParseMatch(string $input, array $expectedPluginInstructionData, string $expectedPageId): void {
         /** @var syntax_plugin_today_today $syntax */
         $syntax = plugin_load('syntax', 'today_today');
 
-        // act
-        $actualOutput = $syntax->handle($input, 5, 1, new Doku_Handler());
+        $actualPluginInstructionData = $syntax->handle($input, 5, 1, new Doku_Handler());
 
-        // assert
-        self::assertEquals($expectedOutput, $actualOutput, $msg);
-    }
-
-    public function testRendererXHTML(): void {
-        /** @var syntax_plugin_today_today $syntax */
-        $syntax = plugin_load('syntax', 'today_today');
-        $testData = [
-            'namespace' => 'name:space',
-        ];
-        $today = date('Y-m-d');
+        self::assertEquals($expectedPluginInstructionData, $actualPluginInstructionData);
 
         $mockRenderer = $this->createMock(Doku_Renderer::class);
         $mockRenderer->expects(self::once())
             ->method('internallink')
-            ->with($testData['namespace'] . ':' . $today, 'today');
+            ->with($expectedPageId, 'today');
 
-        $actualStatus = $syntax->render('xhtml', $mockRenderer, $testData);
+        $actualStatus = $syntax->render('xhtml', $mockRenderer, $actualPluginInstructionData);
 
         self::assertTrue($actualStatus);
     }
