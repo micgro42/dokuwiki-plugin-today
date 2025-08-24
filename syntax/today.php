@@ -58,12 +58,13 @@ final class syntax_plugin_today_today extends SyntaxPlugin
      */
     public function handle($match, $state, $pos, Doku_Handler $handler): array
     {
-        $data = [];
+        $data = trim(substr($match, strlen('{today'), -1));
+        $parts = explode(' ', $data);
 
-        $namespace = trim(substr($match, strlen('{today'), -1));
-        $data['namespace'] = $namespace;
-
-        return $data;
+        return [
+            'namespace' => $parts[0] ?? null,
+            'format' => $parts[1] ?? null,
+        ];
     }
 
     /**
@@ -81,8 +82,10 @@ final class syntax_plugin_today_today extends SyntaxPlugin
             return false;
         }
 
-        $today = date('Y-m-d');
-        $pageId = $data['namespace'] . ':' . $today;
+        $namespace = $data['namespace'] ?? '';
+        $format = $data['format'] ?? 'Y-m-d';
+        $today = date($format);
+        $pageId = $namespace . ':' . $today;
         $renderer->internallink($pageId, 'today');
 
         return true;
