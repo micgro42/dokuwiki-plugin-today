@@ -5,6 +5,9 @@ on:
   schedule:
     - cron: '19 8 25 * *'
 
+permissions:
+  contents: write # autofix pushes the bot/autofix branch
+  pull-requests: write # autofix opens a PR from it
 
 jobs:
   all:
